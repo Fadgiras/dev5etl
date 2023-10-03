@@ -1,6 +1,9 @@
 package com.fadgiras.dev5etl.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "produit")
@@ -10,15 +13,20 @@ public class ProduitEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @JsonAlias("DATE")
     @Column(name = "DATE")
-    String date;
+    @Temporal(TemporalType.DATE)
+    Date date;
 
+    @JsonAlias("PRODID")
     @Column(name = "PRODID")
     int prodid;
 
+    @JsonAlias("CATID")
     @Column(name = "CATID")
     int catid;
 
+    @JsonAlias("FABID")
     @Column(name = "FABID")
     int fabid;
 
@@ -30,11 +38,11 @@ public class ProduitEntity {
         this.id = id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

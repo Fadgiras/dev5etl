@@ -1,5 +1,5 @@
 // Utilisation de l'API fetch pour charger le fichier JSON
-fetch('/build/json/produitsLimite.json')
+fetch('/public/json/produitsLimite.json')
   .then(response => response.json()) // Convertir la réponse en JSON
   .then(data => {
     // Les données JSON sont maintenant disponibles dans la variable 'data'

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ... balises meta, title, etc. ... -->
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+        function App() {
+            const [data, setData] = React.useState([]);
+
+            React.useEffect(() => {
+                // Fonction pour récupérer les données JSON depuis le fichier
+                async function fetchData() {
+                    try {
+                        const response = await fetch('../../pages/homepage/home.html');
+                        const jsonData = await response.json();
+
+                        // Convertir le format de date sans séparateur en format utilisable
+                        const formattedData = jsonData.map(item => {
+                            const year = item.DATE.substring(0, 4);
+                            const month = item.DATE.substring(4, 6);
+                            const day = item.DATE.substring(6, 8);
+                            const formattedDate = new Date(`${year}-${month}-${day}`);
+                            return {
+                                ...item,
+                                DATE: formattedDate
+                            };
+                        });
+
+                        // Trier les données par date
+                        const sortedData = formattedData.sort((a, b) => a.DATE - b.DATE);
+
+                        setData(sortedData);
+                    } catch (error) {
+                        console.error('Erreur lors de la récupération des données JSON:', error);
+                    }
+                }
+
+                // Appeler la fonction pour récupérer les données lors du montage du composant
+                fetchData();
+            }, []); // Le tableau vide en tant que deuxième argument signifie que useEffect s'exécutera une seule fois après le montage initial.
+
+            return (
+                <div>
+                    <h1>Points de Vente (triés par date)</h1>
+                    <ul>
+                        {data.map((pointDeVente, index) => (
+                            <li key={index}>
+                                DATE: {pointDeVente.DATE.toISOString()}, PRODID: {pointDeVente.PRODID}, CATID: {pointDeVente.CATID}, FABID: {pointDeVente.FABID}, MAGID: {pointDeVente.MAGID}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+
+</html>

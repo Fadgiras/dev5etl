@@ -1,5 +1,6 @@
 package com.fadgiras.dev5etl.controller;
 
+import com.fadgiras.dev5etl.dto.ManufacturerProductDTO;
 import com.fadgiras.dev5etl.model.PointVenteEntity;
 import com.fadgiras.dev5etl.model.ProduitEntity;
 import com.fadgiras.dev5etl.repository.ProduitRepository;
@@ -62,6 +63,25 @@ public class ProduitController {
     @RequestMapping(value = "/find/{id}", method = RequestMethod.GET)
     public ProduitEntity findProduit(@PathVariable(value = "id") int id) {
         return produitRepository.findById(id).get();
+    }
+
+    @RequestMapping(value = "/count/cat/{id}", method = RequestMethod.GET)
+    public List<ManufacturerProductDTO> countProduitByCat(@PathVariable(value = "id") int id) {
+        return produitRepository.countProduitByCategorie(id);
+    }
+
+
+    //1.2
+    @RequestMapping(value = "/avg/cat/{id}", method = RequestMethod.GET)
+    public Long avgProdByCategorie(@PathVariable(value = "id") int id) {
+        List list = produitRepository.countProduitByCategorie(id);
+        if (list.size() == 0) return null;
+        Long sum = 0L;
+        for (Object dto : list) {
+            ManufacturerProductDTO manufacturerProductDTO = (ManufacturerProductDTO) dto;
+            sum += manufacturerProductDTO.getProductCount();
+        }
+        return sum / list.size();
     }
 
     @RequestMapping(value = "/debug/add", method = RequestMethod.POST)

@@ -6,10 +6,7 @@ import com.fadgiras.dev5etl.dto.ManufacturerProductDTO;
 import com.fadgiras.dev5etl.model.PointVenteEntity;
 import com.fadgiras.dev5etl.repository.PointVenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = {"http://127.0.0.1:3000"})
 @RequestMapping("/pointvente")
 public class PointVenteController {
 

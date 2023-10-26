@@ -226,5 +226,14 @@ public class PointVenteController {
         return result;
     }
 
+    @RequestMapping(value = "/list/catid", method = RequestMethod.GET)
+    public List<Integer> getCatIdList() {
+        return pointVenteRepository.getCatIdList();
+    }
+
+    @RequestMapping(value = "/list/fabid", method = RequestMethod.GET)
+    public List<Integer> getFabIdList() {
+        return pointVenteRepository.getFabIdList();
+    }
 
 }

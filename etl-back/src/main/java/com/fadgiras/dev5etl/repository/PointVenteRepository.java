@@ -131,6 +131,12 @@ public interface PointVenteRepository extends JpaRepository<PointVenteEntity, In
             "GROUP BY p.magid")
     List<MagasinMarketProdDTO> getProductsCountByMagasinForCategory(@Param("categoryId") int categoryId, @Param("startDate") Date startDate, @Param("endDate") Date endDate , @Param("magIds") List<Integer> magIds);
 
+    @Query("SELECT DISTINCT p.catid " +
+            "FROM PointVenteEntity p ")
+    List<Integer> getCatIdList();
 
+    @Query("SELECT DISTINCT p.fabid " +
+            "FROM PointVenteEntity p ")
+    List<Integer> getFabIdList();
 
 }

@@ -22,6 +22,12 @@ const App: React.FC<Props> = (props) => {
   const [chartData, setChartData] = useState<ChartData>({});
   const [chartOptions, setChartOptions] = useState<any>();
   const [chartResult, setChartResult] = useState<any>([]);
+  const [catList, setCatList] = useState<any>();
+  const [fabList, setFabList] = useState<any>([]);
+  const [months, setMonths] = useState<any>([]);
+  const [selectedCat, setSelectedCat] = useState<string>('');
+  const [selectedMonth, setSelectedMonth] = useState<string>('');
+  const [selectedYear, setSelectedYear] = useState<string>('');
 
   // Options initiales pour le graphique ApexCharts
   const initialChartOptions = {
@@ -45,11 +51,35 @@ const App: React.FC<Props> = (props) => {
     }[];
   }
 
+  const fetchCatIds = async () => {
+    const url = 'http://127.0.0.1:8080/pointvente/list/catid'
+    const result = await fetch(url).then(response => response.json())
+    console.log("catList")
+    console.log(result)
+    setCatList(result)
+  }
+
+  const monthsMap = {
+    "Jan": ["01-01", "01-31"],
+    "Feb": ["02-01", "02-28"],
+    "Mar": ["03-01", "03-31"],
+    "Apr": ["04-01", "04-30"],
+    "May": ["05-01", "05-31"],
+    "Jun": ["06-01", "06-30"],
+    "Jul": ["07-01", "07-31"],
+    "Aug": ["08-01", "08-31"],
+    "Sep": ["09-01", "09-30"],
+    "Oct": ["10-01", "10-31"],
+    "Nov": ["11-01", "11-30"],
+    "Dec": ["12-01", "12-31"],
+  };
+  
+
   const fetchData = async () => {
     //----------------------------------------------GET URL------------------------------------------------------//
-    try {
+    try {      
       const url =
-        'http://127.0.0.1:8080/pointvente/health/fab/109/cat/1/date/2022-05-02/2022-05-31'
+        "http://127.0.0.1:8080/pointvente/health/fab/109/cat/"+ selectedCat +"/date/"+ selectedYear +"-"+monthsMap[selectedMonth as keyof typeof monthsMap][0]+"/"+ selectedYear +"-"+monthsMap[selectedMonth as keyof typeof monthsMap][1]
 
       const result = await fetch(url).then(response => response.json())
       console.log(result)
@@ -399,36 +429,53 @@ const App: React.FC<Props> = (props) => {
     }
   }
   useEffect(() => {
+    fetchCatIds()
     fetchData()
-  }, []
+  }, [selectedCat, selectedMonth, selectedYear]
   );
+
+  const handleCatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCat(event.target.value);
+    fetchData()
+  };
+
+  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedMonth(event.target.value);
+    fetchData()
+  };
+
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(event.target.value);
+    fetchData()
+  };
+
 
   const [chartSeries, setChartSeries] = useState<any>([]);
 
-  // ------------------------------------------------WAIT DATA------------------------------------------------//
-  if (!chartOptions || !chartSeries) {
-    return <div className="center-div">
-      <div aria-label="Orange and tan hamster running in a metal wheel" role="img" className="wheel-and-hamster">
-        <div className="wheel"></div>
-        <div className="hamster">
-          <div className="hamster__body">
-            <div className="hamster__head">
-              <div className="hamster__ear"></div>
-              <div className="hamster__eye"></div>
-              <div className="hamster__nose"></div>
-            </div>
-            <div className="hamster__limb hamster__limb--fr"></div>
-            <div className="hamster__limb hamster__limb--fl"></div>
-            <div className="hamster__limb hamster__limb--br"></div>
-            <div className="hamster__limb hamster__limb--bl"></div>
-            <div className="hamster__tail"></div>
-          </div>
-        </div>
-        <div className="spoke"></div>
-      </div>
-    </div>;
-  }
-  // ------------------------------------------------------------------------------------------------------//
+  // // ------------------------------------------------WAIT DATA------------------------------------------------//
+  // if (!chartOptions || !chartSeries) {
+  //   return <div className="center-div">
+  //     <div aria-label="Orange and tan hamster running in a metal wheel" role="img" className="wheel-and-hamster">
+  //       <div className="wheel"></div>
+  //       <div className="hamster">
+  //         <div className="hamster__body">
+  //           <div className="hamster__head">
+  //             <div className="hamster__ear"></div>
+  //             <div className="hamster__eye"></div>
+  //             <div className="hamster__nose"></div>
+  //           </div>
+  //           <div className="hamster__limb hamster__limb--fr"></div>
+  //           <div className="hamster__limb hamster__limb--fl"></div>
+  //           <div className="hamster__limb hamster__limb--br"></div>
+  //           <div className="hamster__limb hamster__limb--bl"></div>
+  //           <div className="hamster__tail"></div>
+  //         </div>
+  //       </div>
+  //       <div className="spoke"></div>
+  //     </div>
+  //   </div>;
+  // }
+  // // ------------------------------------------------------------------------------------------------------//
 
   return (
     <div className="app-container">
@@ -440,12 +487,42 @@ const App: React.FC<Props> = (props) => {
             <i className="material-icons">space_dashboard</i> Dashboard
           </h1>
           <div>
-            {/* {data.data?.map((item: any) =>
-              <div>
-                <h1>{item.titre}</h1>
-              </div>
-            )} */}
+             {/* Select for category */}
+             <select onChange={handleCatChange} value={selectedCat}>
+              <option value="">Catégorie</option>
+              {catList && catList.map((id: number) => (
+                <option key={id} value={id}>
+                  Catégorie {id}
+                </option>
+              ))}
+            </select>
+
+            {/* Select for month */}
+            <select value={selectedMonth} onChange={handleMonthChange}>
+              <option value="">Mois</option>
+              {Object.keys(monthsMap).map((month) => (
+                <option key={month} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+            {/* Select for year */}
+            <select value={selectedYear} onChange={handleYearChange}>
+              <option value={"2022"}>
+                2022
+              </option>
+              <option value={"2023"}>
+                2023
+              </option>
+            </select>
           </div>
+          
+          {/* -------------------------ApexChart Get Data Graphique 4------------------------- */}
+              <h2>Parts des ventes par mois</h2>
+              <ChartArea result={chartResult}/>
+            {/* ------------------------------------------------------------------------------- */}
+              <h2>Blep</h2>
+              <ChartBar result={chartResult} />
 
           {/* -------------------------ApexChart Get Data Graphique 1------------------------- */}
 
@@ -487,13 +564,6 @@ const App: React.FC<Props> = (props) => {
               height={350}
             />}
             {/* ------------------------------------------------------------------------------- */}
-
-            {/* -------------------------ApexChart Get Data Graphique 4------------------------- */}
-              <h2>Parts des ventes par mois</h2>
-              <ChartArea result={chartResult}/>
-            {/* ------------------------------------------------------------------------------- */}
-              <h2>Blep</h2>
-              <ChartBar result={chartResult} />
           </div>
           {/* ------------------------------------------------------------------------------- */}
 

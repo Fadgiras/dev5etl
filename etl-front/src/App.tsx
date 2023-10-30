@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
 import ChartBar from './components/chartBar';
 import ChartArea from './components/chartArea';
+import Loader from './components/loader';
 
 interface Props { }
 
@@ -25,9 +26,9 @@ const App: React.FC<Props> = (props) => {
   const [catList, setCatList] = useState<any>();
   const [fabList, setFabList] = useState<any>([]);
   const [months, setMonths] = useState<any>([]);
-  const [selectedCat, setSelectedCat] = useState<string>('');
-  const [selectedMonth, setSelectedMonth] = useState<string>('');
-  const [selectedYear, setSelectedYear] = useState<string>('');
+  const [selectedCat, setSelectedCat] = useState<string>('1');
+  const [selectedMonth, setSelectedMonth] = useState<string>('May');
+  const [selectedYear, setSelectedYear] = useState<string>('2022');
 
   // Options initiales pour le graphique ApexCharts
   const initialChartOptions = {
@@ -73,13 +74,13 @@ const App: React.FC<Props> = (props) => {
     "Nov": ["11-01", "11-30"],
     "Dec": ["12-01", "12-31"],
   };
-  
+
 
   const fetchData = async () => {
     //----------------------------------------------GET URL------------------------------------------------------//
-    try {      
+    try {
       const url =
-        "http://127.0.0.1:8080/pointvente/health/fab/109/cat/"+ selectedCat +"/date/"+ selectedYear +"-"+monthsMap[selectedMonth as keyof typeof monthsMap][0]+"/"+ selectedYear +"-"+monthsMap[selectedMonth as keyof typeof monthsMap][1]
+        "http://127.0.0.1:8080/pointvente/health/fab/109/cat/" + selectedCat + "/date/" + selectedYear + "-" + monthsMap[selectedMonth as keyof typeof monthsMap][0] + "/" + selectedYear + "-" + monthsMap[selectedMonth as keyof typeof monthsMap][1]
 
       const result = await fetch(url).then(response => response.json())
       console.log(result)
@@ -193,239 +194,11 @@ const App: React.FC<Props> = (props) => {
       const seriesYears23 = years.map(
         val => result[2]["2023"][val] ?? 0)
       console.log(seriesYears23)
-
-
-      const datard2 = {
-        series: [{
-          name: '2022',
-          data: seriesYears22
-        }, {
-          name: '2023',
-          data: seriesYears23
-        }],
-        options: {
-          chart: {
-            height: 350,
-            type: 'bar',
-          },
-          plotOptions: {
-            bar: {
-              borderRadius: 10,
-              dataLabels: {
-                position: 'top', // top, center, bottom
-              },
-            }
-          },
-          // dataLabels: {
-          //   enabled: true,
-          //   formatter: function (val: any) {
-          //     return val + "%";
-          //   },
-          //   offsetY: -20,
-          //   style: {
-          //     fontSize: '12px',
-          //     colors: ["#304758"]
-          //   }
-          // },
-          xaxis: {
-            categories: ["2022", "2023"],
-            position: 'top',
-            axisBorder: {
-              show: false
-            },
-            axisTicks: {
-              show: false
-            },
-            crosshairs: {
-              fill: {
-                type: 'gradient',
-                gradient: {
-                  colorFrom: '#D8E3F0',
-                  colorTo: '#BED1E6',
-                  stops: [0, 100],
-                  opacityFrom: 0.4,
-                  opacityTo: 0.5,
-                }
-              }
-            },
-            tooltip: {
-              enabled: true,
-            }
-          },
-        },
-        title: {
-          text: 'Monthly Inflation in Argentina, 2002',
-          floating: true,
-          offsetY: 330,
-          align: 'center',
-          style: {
-            color: '#444'
-          }
-        }
-      }
-      // Mettez à jour les états locaux avec les données (STYLE INITIAL)
-      setChartOptions(datard2.options)
-      setChartSeries(datard2.series)
-      // ------------------------------------------------------------------------------------------------------//
-      //
-      //
-      //
-      // ------------------------------------------------SET DATA 3------------------------------------------------//
-
-      const datard3 = {
-        series: [
-          {
-            name: '2022',
-            data: seriesMonths22
-          }, {
-            name: '2023',
-            data: seriesMonths23
-          }],
-        options: {
-          chart: {
-            height: 350,
-            type: 'bar',
-          },
-          plotOptions: {
-            bar: {
-              borderRadius: 10,
-              dataLabels: {
-                position: 'top', // top, center, bottom
-              },
-            }
-          },
-          // dataLabels: {
-          //   enabled: true,
-          //   formatter: function (val: any) {
-          //     return val + "%";
-          //   },
-          //   offsetY: -20,
-          //   style: {
-          //     fontSize: '12px',
-          //     colors: ["#304758"]
-          //   }
-          // },
-          xaxis: {
-            categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            position: 'top',
-            axisBorder: {
-              show: false
-            },
-            axisTicks: {
-              show: false
-            },
-            crosshairs: {
-              fill: {
-                type: 'gradient',
-                gradient: {
-                  colorFrom: '#D8E3F0',
-                  colorTo: '#BED1E6',
-                  stops: [0, 100],
-                  opacityFrom: 0.4,
-                  opacityTo: 0.5,
-                }
-              }
-            },
-            tooltip: {
-              enabled: true,
-            }
-          },
-        },
-        title: {
-          text: 'Monthly Inflation in Argentina, 2002',
-          floating: true,
-          offsetY: 330,
-          align: 'center',
-          style: {
-            color: '#444'
-          }
-        }
-      }
-      // Mettez à jour les états locaux avec les données
-      setChartOptions(datard3.options)
-      setChartSeries(datard3.series)
-      // ------------------------------------------------------------------------------------------------------//
-      //
-      //
-      //
-      // ------------------------------------------------SET DATA 4------------------------------------------------//
-
-      const datard4 = {
-        series: [
-          {
-            name: '2022',
-            data: seriesMonths22
-          }, {
-            name: '2023',
-            data: seriesMonths23
-          }],
-        options: {
-          chart: {
-            height: 350,
-            type: 'bar',
-          },
-          plotOptions: {
-            bar: {
-              borderRadius: 10,
-              dataLabels: {
-                position: 'top', // top, center, bottom
-              },
-            }
-          },
-          // dataLabels: {
-          //   enabled: true,
-          //   formatter: function (val: any) {
-          //     return val + "%";
-          //   },
-          //   offsetY: -20,
-          //   style: {
-          //     fontSize: '12px',
-          //     colors: ["#304758"]
-          //   }
-          // },
-          xaxis: {
-            categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            position: 'top',
-            axisBorder: {
-              show: false
-            },
-            axisTicks: {
-              show: false
-            },
-            crosshairs: {
-              fill: {
-                type: 'gradient',
-                gradient: {
-                  colorFrom: '#D8E3F0',
-                  colorTo: '#BED1E6',
-                  stops: [0, 100],
-                  opacityFrom: 0.4,
-                  opacityTo: 0.5,
-                }
-              }
-            },
-            tooltip: {
-              enabled: true,
-            }
-          },
-        },
-        title: {
-          text: 'Monthly Inflation in Argentina, 2002',
-          floating: true,
-          offsetY: 330,
-          align: 'center',
-          style: {
-            color: '#444'
-          }
-        }
-      }
-      // Mettez à jour les états locaux avec les données
-      setChartOptions(datard4.options)
-      setChartSeries(datard4.series)
-      // ------------------------------------------------------------------------------------------------------//
-
     } catch (error) {
       console.error('Erreur lors de la récupération des données :', error);
+      // Réinitialiser l'état local en cas d'erreur
+      setChartSeries([]);
+      setChartOptions({});
     }
   }
   useEffect(() => {
@@ -445,8 +218,10 @@ const App: React.FC<Props> = (props) => {
   };
 
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedYear(event.target.value);
-    fetchData()
+    // setSelectedYear(event.target.value);
+    // fetchData()
+    const newYear = event.target.value;
+    setSelectedYear(newYear);
   };
 
 
@@ -454,26 +229,7 @@ const App: React.FC<Props> = (props) => {
 
   // // ------------------------------------------------WAIT DATA------------------------------------------------//
   // if (!chartOptions || !chartSeries) {
-  //   return <div className="center-div">
-  //     <div aria-label="Orange and tan hamster running in a metal wheel" role="img" className="wheel-and-hamster">
-  //       <div className="wheel"></div>
-  //       <div className="hamster">
-  //         <div className="hamster__body">
-  //           <div className="hamster__head">
-  //             <div className="hamster__ear"></div>
-  //             <div className="hamster__eye"></div>
-  //             <div className="hamster__nose"></div>
-  //           </div>
-  //           <div className="hamster__limb hamster__limb--fr"></div>
-  //           <div className="hamster__limb hamster__limb--fl"></div>
-  //           <div className="hamster__limb hamster__limb--br"></div>
-  //           <div className="hamster__limb hamster__limb--bl"></div>
-  //           <div className="hamster__tail"></div>
-  //         </div>
-  //       </div>
-  //       <div className="spoke"></div>
-  //     </div>
-  //   </div>;
+  //   <Loader />
   // }
   // // ------------------------------------------------------------------------------------------------------//
 
@@ -487,8 +243,8 @@ const App: React.FC<Props> = (props) => {
             <i className="material-icons">space_dashboard</i> Dashboard
           </h1>
           <div>
-             {/* Select for category */}
-             <select onChange={handleCatChange} value={selectedCat}>
+            {/* Select for category */}
+            <select onChange={handleCatChange} value={selectedCat}>
               <option value="">Catégorie</option>
               {catList && catList.map((id: number) => (
                 <option key={id} value={id}>
@@ -516,56 +272,13 @@ const App: React.FC<Props> = (props) => {
               </option>
             </select>
           </div>
-          
-          {/* -------------------------ApexChart Get Data Graphique 4------------------------- */}
-              <h2>Parts des ventes par mois</h2>
-              <ChartArea result={chartResult}/>
-            {/* ------------------------------------------------------------------------------- */}
-              <h2>Blep</h2>
-              <ChartBar result={chartResult} />
 
           {/* -------------------------ApexChart Get Data Graphique 1------------------------- */}
+          <h2>Parts des ventes par mois</h2>
+          <ChartArea result={chartResult} />
+          {/* -------------------------ApexChart Get Data Graphique 2------------------------- */}          <h2>Classement magasin du mois</h2>
+          <ChartBar result={chartResult} />
 
-          <h2>Vente du fabriquant {1}</h2>
-          {chartOptions && chartSeries && <ApexCharts
-            options={chartOptions}
-            series={chartSeries}
-            type="area"
-            height={350}
-          />}
-          {/* ------------------------------------------------------------------------------- */}
-
-          {/* -------------------------ApexChart Get Data Graphique 2------------------------- */}
-          <div>
-            <h2>Vente par mois de l'article {2}</h2>
-            {chartOptions && chartSeries && <ApexCharts
-              options={chartOptions}
-              series={[
-                {
-                  name: '2022',
-                  data: chartData['2022'],
-                },
-                {
-                  name: '2023',
-                  data: chartData['2023'],
-                },
-              ]}
-              type="area"
-              height={350}
-            />}
-            {/* ------------------------------------------------------------------------------- */}
-
-            {/* -------------------------ApexChart Get Data Graphique 3------------------------- */}
-            <h2>Top 10 des ventes magasins</h2>
-            {chartOptions && chartSeries && <ApexCharts
-              options={chartOptions}
-              series={chartSeries}
-              type="area"
-              height={350}
-            />}
-            {/* ------------------------------------------------------------------------------- */}
-          </div>
-          {/* ------------------------------------------------------------------------------- */}
 
         </main>
       </div>

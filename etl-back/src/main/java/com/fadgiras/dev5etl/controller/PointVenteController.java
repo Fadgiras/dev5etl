@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = {"http://127.0.0.1:3000"})
+@CrossOrigin(origins = {"http://192.168.56.1:3000", "http://localhost:3000", "http://172.16.5.12:3000", "http://dashflopi.com"})
 @RequestMapping("/pointvente")
 public class PointVenteController {
 
@@ -176,6 +176,8 @@ public class PointVenteController {
         return map;
     }
 
+//---------------------------------CODE FLORIAN---------------------------------------------//
+
     @RequestMapping(value = "/health/fab/{fabid}/cat/{catid}/date/{date1}/{date2}", method = RequestMethod.GET)
     public ArrayList checkFabricantHealth(@PathVariable int fabid, @PathVariable int catid, @PathVariable String date1, @PathVariable String date2) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -183,39 +185,11 @@ public class PointVenteController {
         Date endDate = sdf.parse(date2);
         List<Integer>  listprod ;
         List<Integer> listid = new ArrayList<>();
-        // histo : part générale  ->  sum de tout les prod du fab sur le mois /  Sum de tout les prod sur le mois
-        // top : pour chaque mag du top avoir le nombre de prod du fab / nombre de prod total du mag le tout en %
         listid = pointVenteRepository.findTop10MagasinIdForCategory(catid, startDate, endDate).stream().limit(10).collect(Collectors.toCollection(ArrayList::new));
         List<?> list = pointVenteRepository.findTop10MagasinMarketShareForCategory(catid, startDate, endDate).stream().limit(10).collect(Collectors.toList());
 
-//        System.err.println(pointVenteRepository.countProductsInCategoryMonth(catid));
         List<FabProdsDateDTO> dtos = pointVenteRepository.countProductsInCategoryMonth(catid);
         dtos.sort(Comparator.comparing(FabProdsDateDTO::getDate).reversed());
-//        System.err.println(dtos);
-
-//        System.err.println(aggregateDto(pointVenteRepository.countProductsInCategoryMonth(catid)));
-//        System.err.println(pointVenteRepository.countProductsInCategoryMonthByFab(catid, fabid));
-//        System.err.println("Find top 10 market share");
-//        System.err.println(list);
-//        System.err.println("Find top 10 magasin id");
-//        System.err.println(pointVenteRepository.findTop10MagasinIdForCategory(catid, startDate, endDate));
-//        System.err.println("Find top 10 magasin id limit 10");
-//        System.err.println(listid);
-//        System.err.println("get number of prod in each magasin of top 10");
-//        System.err.println(pointVenteRepository.findTop10MagasinProdForCategory(catid, startDate, endDate).stream().limit(10).collect(Collectors.toList()));
-//
-//        System.err.println(pointVenteRepository.findFabricantHealth(fabid, catid, startDate, endDate));
-//        System.err.println(pointVenteRepository.findFabricantHealth(fabid, catid, startDate, endDate).size());
-//
-//        System.err.println(pointVenteRepository.getProductsCountByMagasinForCategoryAndFabricant(catid, fabid, startDate, endDate, listid));
-//        System.err.println(pointVenteRepository.getProductsCountByMagasinForCategoryAndFabricant(catid, fabid, startDate, endDate, listid).size());
-//
-//        System.err.println(pointVenteRepository.countProductsInCategoryMonth(catid, startDate, endDate));
-//
-//        ArrayList<Integer> orderList = pointVenteRepository.findTop10MagasinIdForCategory(catid, startDate, endDate);
-//        List<FabricantHealthDTO> orderedList =pointVenteRepository.findFabricantHealth(fabid, catid, startDate, endDate);
-//        orderedList.sort(Comparator.comparingInt(dto -> orderList.indexOf(dto.getMagid())));
-//        System.err.println(orderedList);
 
           ArrayList result = new ArrayList();
             result.add(aggregateDto(pointVenteRepository.countProductsInCategoryMonthByFab(catid, fabid)));
@@ -235,5 +209,6 @@ public class PointVenteController {
     public List<Integer> getFabIdList() {
         return pointVenteRepository.getFabIdList();
     }
+//------------------------------------------------------------------------------------------//
 
 }

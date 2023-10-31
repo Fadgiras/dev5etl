@@ -238,7 +238,7 @@ const App: React.FC<Props> = (props) => {
 
   return (
     <body>
-      <div className="app-container">
+      <div id="wrapper" className='chart-container'>
         {/* // ------------------------------------------------SET HEADER------------------------------------------------// */}
         {/* <header>
           <h1>
@@ -325,7 +325,7 @@ const App: React.FC<Props> = (props) => {
 
         {/* // ------------------------------------------------SET MAIN------------------------------------------------// */}
 
-        <div id="wrapper">
+        <div className="content-area">
 
         {/* Ajoutez une classe à votre élément main */}
           <div className="content-area">

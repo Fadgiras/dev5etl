@@ -1,4 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
+import { Card, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Link } from 'react-router-dom';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 import logo from './logo.svg';
 
 import './App.css';
@@ -122,6 +127,7 @@ const App: React.FC<Props> = (props) => {
             height: 350,
             type: 'bar',
           },
+          
           plotOptions: {
             bar: {
               borderRadius: 10,
@@ -130,17 +136,17 @@ const App: React.FC<Props> = (props) => {
               },
             }
           },
-          // dataLabels: {
-          //   enabled: true,
-          //   formatter: function (val: any) {
-          //     return val + "%";
-          //   },
-          //   offsetY: -20,
-          //   style: {
-          //     fontSize: '12px',
-          //     colors: ["#304758"]
-          //   }
-          // },
+          dataLabels: {
+            enabled: true,
+            formatter: function (val: any) {
+              return val + "%";
+            },
+            offsetY: -20,
+            style: {
+              fontSize: '12px',
+              colors: ["#304758"]
+            }
+          },
           xaxis: {
             categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             position: 'top',
@@ -154,15 +160,12 @@ const App: React.FC<Props> = (props) => {
               fill: {
                 type: 'gradient',
                 gradient: {
-                  colorFrom: '#D8E3F0',
-                  colorTo: '#BED1E6',
-                  stops: [0, 100],
-                  opacityFrom: 0.4,
-                  opacityTo: 0.5,
+                  gradientToColors: ["#F55555", "#6078ea", "#6094ea"]
                 }
               }
             },
             tooltip: {
+              theme: "dark",
               enabled: true,
             }
           },
@@ -234,56 +237,130 @@ const App: React.FC<Props> = (props) => {
   // // ------------------------------------------------------------------------------------------------------//
 
   return (
-    <div className="app-container">
-      <Header />
-      <div className="content-container">
-        <Sidebar />
-        <main>
+    <body>
+      <div className="app-container">
+        {/* // ------------------------------------------------SET HEADER------------------------------------------------// */}
+        {/* <header>
           <h1>
             <i className="material-icons">space_dashboard</i> Dashboard
           </h1>
-          <div>
-            {/* Select for category */}
-            <select onChange={handleCatChange} value={selectedCat}>
-              <option value="">Catégorie</option>
-              {catList && catList.map((id: number) => (
-                <option key={id} value={id}>
-                  Catégorie {id}
-                </option>
-              ))}
-            </select>
+        </header> */}
+        {/* // ------------------------------------------------------------------------------------------------// */}
 
-            {/* Select for month */}
-            <select value={selectedMonth} onChange={handleMonthChange}>
-              <option value="">Mois</option>
-              {Object.keys(monthsMap).map((month) => (
-                <option key={month} value={month}>
-                  {month}
-                </option>
-              ))}
-            </select>
-            {/* Select for year */}
-            <select value={selectedYear} onChange={handleYearChange}>
-              <option value={"2022"}>
-                2022
-              </option>
-              <option value={"2023"}>
-                2023
-              </option>
-            </select>
+        {/* // ------------------------------------------------SET SIDEBAR------------------------------------------------// */}
+        <Drawer variant="permanent" anchor="left">
+          <List>
+            <div id="form-ui">
+              <form action="" method="post" id="form">
+                <div id="sidebar">
+                  <h2>SANTE DU MARCHE</h2>
+                  <ul>
+                    <li><a href="#">Accueil</a></li>
+                    <li><a href="#">À propos</a></li>
+                    <li><a href="#">Contact</a></li>
+                  </ul>
+                  <div id="bar"></div>
+
+                  <h3>Fabriquant 109</h3>
+
+                  {/* Select for category */}
+                  <label className="wrapper">
+                    <span className="placeholder">Catégorie</span>
+                    <select placeholder="Catégorie" name="text" className="select"
+                      onChange={handleCatChange} value={selectedCat}>
+                      {/* <option value="">Catégorie</option> */}
+                      {catList && catList.map((id: number) => (
+                        <option key={id} value={id}>
+                          Catégorie {id}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  {/* Select for month */}
+                  <label className="wrapper">
+                    <span className="placeholder">Mois</span>
+                    <select placeholder="Mois" name="text" className="select"
+                      value={selectedMonth} onChange={handleMonthChange}>
+                      {/* <option value="">Mois</option> */}
+                      {Object.keys(monthsMap).map((month) => (
+                        <option key={month} value={month}>
+                          {month}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  {/* Select for year */}
+                  <label className="wrapper">
+                    <span className="placeholder">Catégorie</span>
+                    <select placeholder="Catégorie" name="text" className="select"
+                      value={selectedYear} onChange={handleYearChange}>
+                      <option value={"2022"}>
+                        2022
+                      </option>
+                      <option value={"2023"}>
+                        2023
+                      </option>
+                    </select>
+                  </label>
+                  <h4>
+                    <div>
+                      <button className="btn">
+                        <i className="animation"></i>
+                        Rafraichir
+                        <i className="animation"></i>
+                      </button>
+                    </div>
+                  </h4>
+                  <div className="sidebar-footer">
+                  <SettingsIcon />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </List>
+        </Drawer>
+        {/* // ------------------------------------------------------------------------------------------------// */}
+
+        {/* // ------------------------------------------------SET MAIN------------------------------------------------// */}
+
+        <div id="wrapper">
+
+        {/* Ajoutez une classe à votre élément main */}
+          <div className="content-area">
+            <div className="container-fluid">
+              <div className="main">
+
+                <div className="row mt-4">
+                  <h2 className="col-md-5">Parts des ventes par mois</h2>
+                  <div className="box columnbox mt-4">
+                    <div id="columnchart">
+                      <ChartArea result={chartResult} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <h2 className="col-md-5">Classement magasin du mois</h2>
+                  <div className="box radialbox mt-4">
+                    <div id="circlechart">
+                     <ChartBar result={chartResult} />
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+
           </div>
+        {/* // ------------------------------------------------------------------------------------------------// */}
 
-          {/* -------------------------ApexChart Get Data Graphique 1------------------------- */}
-          <h2>Parts des ventes par mois</h2>
-          <ChartArea result={chartResult} />
-          {/* -------------------------ApexChart Get Data Graphique 2------------------------- */}          <h2>Classement magasin du mois</h2>
-          <ChartBar result={chartResult} />
-
-
-        </main>
+        {/* // ------------------------------------------------SET FOOTER------------------------------------------------// */}
+        {/* <Footer /> */}
+        {/* // ------------------------------------------------------------------------------------------------// */}
       </div>
-      <Footer />
-    </div>
+    </body>
   )
 
 }

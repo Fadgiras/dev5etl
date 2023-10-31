@@ -53,21 +53,82 @@ export default function ChartBar({ result }: Props) {
         // 4. Configurer les options du graphique
         const options = {
           chart: {
-            type: 'bar',
-            stacked: true,
+            type: 'radialBar',
+            height: 250,
+            offsetX: 0,
+            foreColor: "#fff",
+            toolbar: {
+              show: false
+            }
+          },
+          title: {
+            text: 'Classement magasin du mois'
+          },
+          colors: ["#6078ea", "#17ead9", "#f02fc2"],
+          stroke: {
+            width: 3
+          },
+          dataLabels: {
+            enabled: true
+          },
+          grid: {
+            borderColor: "#40475D"
           },
           plotOptions: {
-            bar: {
-              horizontal: true,
-            },
+            radialBar: {
+              inverseOrder: false,
+              hollow: {
+                margin: 5,
+                size: "48%",
+                background: "transparent"
+              },
+              track: {
+                show: true,
+                background: "#40475D",
+                strokeWidth: "10%",
+                opacity: 1,
+                margin: 3 // margin is in pixels
+              }
+            }
           },
           xaxis: {
+            axisTicks: {
+              color: "#333"
+            },
+            axisBorder: {
+              color: "#333"
+            },
             categories: sortedData.map((item: { magid: any; }) => `Magasin ${item.magid}`),
           },
+          fill: {
+            type: "gradient",
+            gradient: {
+              shade: "dark",
+              type: "horizontal",
+              shadeIntensity: 0.5,
+              inverseColors: true,
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [0, 100]
+            }
+          },
           tooltip: {
+            theme: "dark",
+            yaxis: {
+              decimalsInFloat: 2,
+              opposite: true,
+              labels: {
+                offsetX: -10
+              }
+            },
             y: {
               formatter: (val: any) => `${val}%`,
             },
+            legend: {
+              position: 'top',
+              horizontalAlign: 'left',
+              offsetX: 40
+            }
           },
         };
 

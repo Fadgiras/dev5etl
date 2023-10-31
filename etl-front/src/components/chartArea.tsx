@@ -10,10 +10,49 @@ interface Props { result: any; }
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 let chartOptions = {
+  chart: {
+    foreColor: "#fff",
+    toolbar: {
+      show: false
+    }
+  },
+  title: {
+    text: 'Parts des ventes par mois'
+  },
+  colors: ["#FCCF31", "#17ead9", "#f02fc2"],
+  stroke: {
+    width: 3
+  },
+  dataLabels: {
+    enabled: true
+  },
+  grid: {
+    borderColor: "#40475D"
+  },
     xaxis: {
+      axisTicks: {
+        color: "#333"
+      },
+      axisBorder: {
+        color: "#333"
+      },
       categories: months,
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        gradientToColors: ["#F55555", "#6078ea", "#6094ea"]
+      }
     },    
     tooltip: {
+      theme: "dark",
+      yaxis: {
+        decimalsInFloat: 2,
+        opposite: true,
+        labels: {
+          offsetX: -10
+        }
+      },
         y: {
             formatter: (val: number) => `${val.toFixed(2)}%`,
         },

@@ -227,6 +227,13 @@ const App: React.FC<Props> = (props) => {
     setSelectedYear(newYear);
   };
 
+  const handleRefreshClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    // Empêcher le comportement de soumission par défaut du formulaire
+    event.preventDefault();
+    
+    // Rediriger vers localhost
+    window.location.reload();
+  };
 
   const [chartSeries, setChartSeries] = useState<any>([]);
 
@@ -261,7 +268,7 @@ const App: React.FC<Props> = (props) => {
                   </ul>
                   <div id="bar"></div>
 
-                  <h3>Fabriquant 109</h3>
+                  <h3>Fabricant 109</h3>
 
                   {/* Select for category */}
                   <label className="wrapper">
@@ -306,11 +313,13 @@ const App: React.FC<Props> = (props) => {
                   </label>
                   <h4>
                     <div>
-                      <button className="btn">
+                    <form onSubmit={(event) => event.preventDefault()}>
+                      <button className="btn" onClick={handleRefreshClick}>
                         <i className="animation"></i>
                         Rafraichir
                         <i className="animation"></i>
                       </button>
+                      </form>
                     </div>
                   </h4>
                   <div className="sidebar-footer">
@@ -333,7 +342,7 @@ const App: React.FC<Props> = (props) => {
               <div className="main">
 
                 <div className="row mt-4">
-                  <h2 className="col-md-5">Parts des ventes par mois</h2>
+                  <h2 className="col-md-5"></h2>
                   <div className="box columnbox mt-4">
                     <div id="columnchart">
                       <ChartArea result={chartResult} />
@@ -342,7 +351,7 @@ const App: React.FC<Props> = (props) => {
                 </div>
 
                 <div className="row">
-                  <h2 className="col-md-5">Classement magasin du mois</h2>
+                  <h2 className="col-md-5"></h2>
                   <div className="box radialbox mt-4">
                     <div id="circlechart">
                      <ChartBar result={chartResult} />
